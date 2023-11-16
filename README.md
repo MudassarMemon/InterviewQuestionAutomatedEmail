@@ -9,6 +9,6 @@ In the face of a highly competitive job market, preparing for a software enginee
 - python-crontab: Python module that automates script execution
 
 ### Future implementations:
-- considering GPT4 intergration that provides feedback to your answer to the daily interview question
+- consider GPT4 intergration that reviews your answer and provides constructive feedback
 
 <img alt="readme-image" src="https://github.com/MudassarMemon/InterviewQuestionAutomatedEmail/blob/main/ReadMeImage.png" />
