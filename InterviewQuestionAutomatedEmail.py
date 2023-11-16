@@ -1,5 +1,5 @@
 import smtplib
-import dotenv from load_dotenv
+from dotenv import load_dotenv
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import openpyxl
@@ -25,17 +25,15 @@ def send_email(subject, body, to_email, smtp_server, smtp_port, sender_email, se
         server.login(sender_email, sender_password)
         server.sendmail(sender_email, to_email, message.as_string())
 
-
-
 if __name__ == "__main__":
     email_subject = "Coding Interview Question"
     email_body = "Here is your daily coding interview question:\n\n{}"
     receiver_email = "mudassar95memon@gmail.com"
     smtp_server = "smtp.gmail.com"
     smtp_port = 587
-    sender_email = "mudassar95memon@gmail.com"
+    sender_email = "mudassarsdailycodingquestion@gmail.com"
 
-    sender_password = os.environ.get("EMAIL_PW")
+    sender_password = os.environ.get("APP_PW")
 
     excel_file_path = "./InterviewQuestions.xlsx"
 
