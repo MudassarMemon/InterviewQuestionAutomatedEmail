@@ -10,7 +10,7 @@ load_dotenv()
 def read_questions_from_excel(file_path):
     workbook = openpyxl.load_workbook(file_path)
     sheet = workbook.active
-    questions = [sheet.cell(row=i, column=2).value for i in range(4, sheet.max_row + 1)]
+    questions = [[sheet.cell(row=i, column=1).value, sheet.cell(row=i, column=2).value, sheet.cell(row=i, column=3).value] for i in range(4, sheet.max_row + 1)]
     return questions
 
 def send_email(subject, body, to_email, smtp_server, smtp_port, sender_email, sender_password):
@@ -27,7 +27,7 @@ def send_email(subject, body, to_email, smtp_server, smtp_port, sender_email, se
 
 if __name__ == "__main__":
     email_subject = "Coding Interview Question"
-    email_body = "Here is your daily coding interview question:\n\n{}"
+    email_body = "Today's daily coding interview question is on {}:\n\n{}\n\nStuck? Find the correct answer here: {}"
     receiver_email = "mudassar95memon@gmail.com"
     smtp_server = "smtp.gmail.com"
     smtp_port = 587
@@ -51,9 +51,11 @@ if __name__ == "__main__":
 
     # Send the next question
     if last_sent_question < len(questions) - 1:
-        next_question = questions[last_sent_question]
+        next_question = questions[last_sent_question][1]
+        subject = questions[last_sent_question][0]
+        answer = questions[last_sent_question][2]
 
-        email_text = email_body.format(next_question)
+        email_text = email_body.format(subject, next_question, answer)
         send_email(email_subject, email_text, receiver_email, smtp_server, smtp_port, sender_email, sender_password)
 
         # Update the last sent question
