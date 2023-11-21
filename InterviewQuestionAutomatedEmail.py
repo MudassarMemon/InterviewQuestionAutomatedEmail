@@ -2,10 +2,16 @@ import smtplib
 from dotenv import load_dotenv
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+from datetime import date
 import openpyxl
 import os
+import traceback 
+
 
 load_dotenv()
+
+# File logs success/error messages
+message_log_file = "/Users/mudassarmemon/Documents/GitHub/InterviewQuestionAutomatedEmail/message_log.txt"
 
 def read_questions_from_excel(file_path):
     workbook = openpyxl.load_workbook(file_path)
@@ -19,11 +25,21 @@ def send_email(subject, body, to_email, smtp_server, smtp_port, sender_email, se
     message['To'] = to_email
     message['Subject'] = subject
     message.attach(MIMEText(body, 'plain'))
+    try:
+        with smtplib.SMTP(smtp_server, smtp_port) as server:
+            server.starttls()
+            server.login(sender_email, sender_password)
+            server.sendmail(sender_email, to_email, message.as_string())
 
-    with smtplib.SMTP(smtp_server, smtp_port) as server:
-        server.starttls()
-        server.login(sender_email, sender_password)
-        server.sendmail(sender_email, to_email, message.as_string())
+        #log success
+        with open(message_log_file, "a") as log_file:
+            log_file.write("Email sent successfully on " + str(date.today()) + ".\n")
+
+    except Exception as e:
+        # Log error message along with the exception details
+        with open(message_log_file, "a") as log_file:
+            log_file.write(f"Error sending email on {str(date.today())}: {str(e)}\n")
+            log_file.write(traceback.format_exc() + "\n")  # Include traceback information
 
 if __name__ == "__main__":
     email_subject = "Coding Interview Question"
@@ -35,10 +51,10 @@ if __name__ == "__main__":
 
     sender_password = os.environ.get("APP_PW")
 
-    excel_file_path = "./InterviewQuestions.xlsx"
+    excel_file_path = "/Users/mudassarmemon/Documents/GitHub/InterviewQuestionAutomatedEmail/InterviewQuestions.xlsx"
 
     # Keep track of the last sent question
-    sent_question_file = "./sent_question.txt"
+    sent_question_file = "/Users/mudassarmemon/Documents/GitHub/InterviewQuestionAutomatedEmail/sent_question.txt"
 
     # Read the last sent question
     if os.path.exists(sent_question_file):
