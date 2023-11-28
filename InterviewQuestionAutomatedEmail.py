@@ -7,7 +7,13 @@ import openpyxl
 import os
 import traceback 
 
+""" 
+Using crontab entry below failed to run script when computer in sleep: 
+0 9 * * * /Users/mudassarmemon/.pyenv/shims/python3 /Users/mudassarmemon/Documents/GitHub/InterviewQuestionAutomatedEmail/InterviewQuestionAutomatedEmail.py
 
+I removed the crontab entry and opted to create launch agent to schedule automate script execution --
+launchd runs script at 9AM, however, if computer is asleep, script will still run on load.
+"""
 load_dotenv()
 
 # File logs success/error messages
